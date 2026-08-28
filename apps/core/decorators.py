@@ -1,5 +1,6 @@
-﻿from functools import wraps
+from functools import wraps
 
+from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseForbidden
 

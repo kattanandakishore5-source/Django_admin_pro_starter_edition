@@ -122,3 +122,22 @@ class UserViewSet(viewsets.ModelViewSet):
         user.set_password(new_password)
         user.save()
         return Response({'message': 'Password changed successfully'})
+
+
+def signup_view(request):
+    from django.shortcuts import render, redirect
+    from django.contrib.auth import login as auth_login
+    from .forms import CustomUserCreationForm
+
+    if request.user.is_authenticated:
+        return redirect('dashboard_home')
+
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            auth_login(request, user)
+            return redirect('dashboard_home')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'registration/signup.html', {'form': form})

@@ -1,4 +1,4 @@
-﻿from django.conf import settings
+from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.views import LoginView
@@ -20,9 +20,12 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+from apps.accounts.views import signup_view
+
 urlpatterns = [
     path('', RedirectView.as_view(url='/dashboard/'), name='root-redirect'),
     path('accounts/login/', LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('accounts/signup/', signup_view, name='signup'),
     path('admin/', admin.site.urls),
     path('api/auth/', include('apps.accounts.urls')),
     path('api/dashboard/', include('apps.dashboard.urls')),

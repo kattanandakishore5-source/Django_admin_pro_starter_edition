@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up — Django Admin Pro</title>
+    <meta name="description" content="Create a new account on Django Admin Pro Starter.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        electric: '#3b82f6',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+
+    <!-- Google Font: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        [x-cloak] { display: none !important; }
+        
+        /* Grid background pattern */
+        .bg-grid {
+            background-color: #f4f4f0;
+            background-image: 
+                radial-gradient(circle, #000 1.5px, transparent 1.5px), 
+                radial-gradient(circle, #000 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+            opacity: 0.15;
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        /* Neo-Brutalist Shadow */
+        .brutal-shadow {
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+        }
+        
+        .brutal-shadow-button {
+            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+        }
+        
+        .brutal-shadow-button:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 1);
+        }
+
+        .brutal-shadow-input:focus {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+        }
+    </style>
+</head>
+
+<body class="h-full bg-[#f4f4f0] font-sans antialiased text-black relative flex items-center justify-center p-4">
+    <!-- Decorative background -->
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <!-- Main Container -->
+    <div class="w-full max-w-md bg-white border-[3px] border-black p-8 brutal-shadow relative z-10">
+        <!-- Badge -->
+        <div class="absolute -top-5 left-8 bg-[#facc15] text-black border-[3px] border-black px-4 py-1 text-xs font-black uppercase tracking-widest brutal-shadow-button">
+            Starter Tier
+        </div>
+
+        <!-- Header -->
+        <div class="text-left mb-8 mt-2">
+            <h1 class="text-4xl font-extrabold tracking-tight uppercase leading-none">
+                Create<br>Account
+            </h1>
+            <p class="mt-2 text-sm font-semibold text-gray-700">Enter your details to get started.</p>
+        </div>
+
+        <!-- Form Error Summary -->
+        {% if form.non_field_errors %}
+        <div class="mb-6 border-[3px] border-black bg-red-100 p-4 brutal-shadow-button">
+            <div class="flex items-start gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div class="text-sm font-bold text-red-800">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Signup Form -->
+        <form method="post" class="space-y-5" novalidate>
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="space-y-1.5">
+                <label for="{{ field.id_for_label }}" class="block text-xs font-black uppercase tracking-wider text-black">
+                    {{ field.label }}
+                </label>
+                <div class="relative">
+                    {% if field.name == "password1" or field.name == "password2" %}
+                        <input
+                            type="password"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            required
+                            placeholder="••••••••"
+                            class="w-full bg-white text-black placeholder-gray-400 border-[3px] border-black p-3 font-bold brutal-shadow-button focus:outline-none transition-all brutal-shadow-input"
+                        >
+                    {% else %}
+                        <input
+                            type="{{ field.field.widget.input_type|default:'text' }}"
+                            name="{{ field.html_name }}"
+                            id="{{ field.id_for_label }}"
+                            {% if field.field.required %}required{% endif %}
+                            placeholder="{{ field.label }}"
+                            value="{{ field.value|default:'' }}"
+                            class="w-full bg-white text-black placeholder-gray-400 border-[3px] border-black p-3 font-bold brutal-shadow-button focus:outline-none transition-all brutal-shadow-input"
+                        >
+                    {% endif %}
+                </div>
+                
+                {% if field.errors %}
+                <div class="text-red-600 text-xs font-black mt-1">
+                    {% for error in field.errors %}
+                        <p>· {{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if field.help_text %}
+                <p class="text-[10px] text-gray-500 font-bold leading-tight">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <!-- Terms (Check option) -->
+            <div class="flex items-center gap-2 py-1">
+                <input type="checkbox" id="terms" required
+                       class="h-5 w-5 border-[3px] border-black bg-white checked:bg-black checked:border-black accent-black focus:ring-0">
+                <label for="terms" class="text-xs font-bold cursor-pointer text-gray-700">
+                    I agree to the <a href="#" class="underline hover:text-black">Terms of Service</a>
+                </label>
+            </div>
+
+            <!-- Submit -->
+            <button
+                type="submit"
+                class="w-full border-[3px] border-black bg-electric hover:bg-[#2563eb] py-3.5 text-sm font-black uppercase text-white tracking-widest transition-all brutal-shadow-button active:translate-x-[4px] active:translate-y-[4px]"
+            >
+                Sign Up
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="relative my-6">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t-[3px] border-black"></div>
+            </div>
+            <div class="relative flex justify-center">
+                <span class="bg-white border-[3px] border-black px-3 py-0.5 text-xs font-black uppercase">Already have an account?</span>
+            </div>
+        </div>
+
+        <!-- Login Link -->
+        <a href="{% url 'login' %}" 
+           class="block text-center w-full border-[3px] border-black bg-[#facc15] hover:bg-[#eab308] py-3 text-sm font-black uppercase text-black tracking-widest transition-all brutal-shadow-button">
+            Log In
+        </a>
+    </div>
+</body>
+</html>

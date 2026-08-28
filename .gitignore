@@ -20,3 +20,6 @@ staticfiles/
 media/
 mnt/
 django_admin_pro.zip
+django_admin_pro
+venv/
+
