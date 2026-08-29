@@ -1,6 +1,8 @@
 # Django Admin Pro - Quick Start Guide
 
-Get up and running in 5 minutes!
+Get up and running in under 5 minutes!
+
+---
 
 ## 🚀 Quick Start with Docker (Recommended)
 
@@ -12,10 +14,10 @@ Get up and running in 5 minutes!
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/django-admin-pro.git
+git clone <repo-url>
 cd django-admin-pro
 
-# 2. Copy environment file
+# 2. Copy environment variables
 cp .env.example .env
 
 # 3. Start services
@@ -29,8 +31,8 @@ docker-compose exec web python manage.py create_demo_data
 
 # 6. Access the app
 # Dashboard: http://localhost:8000/dashboard/
-# Admin: http://localhost:8000/admin/
-# API Docs: http://localhost:8000/api/docs/
+# Admin Panel: http://localhost:8000/admin/
+# API Swagger Docs: http://localhost:8000/api/docs/
 ```
 
 **Demo Credentials:**
@@ -43,15 +45,13 @@ docker-compose exec web python manage.py create_demo_data
 
 ### Prerequisites
 - Python 3.11+
-- PostgreSQL 15+
-- Redis 7+
 - pip & virtualenv
 
 ### Steps
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/django-admin-pro.git
+git clone <repo-url>
 cd django-admin-pro
 
 # 2. Create virtual environment
@@ -61,31 +61,17 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Copy environment file
+# 4. Copy environment variables
 cp .env.example .env
 
-# 5. Configure .env
-nano .env
-# Update database credentials, email settings, etc.
-
-# 6. Run migrations
+# 5. Run migrations
 python manage.py migrate
 
-# 7. Create demo data
+# 6. Create demo data
 python manage.py create_demo_data
 
-# 8. Start development server (Terminal 1)
+# 7. Start development server
 python manage.py runserver
-
-# 9. Start Celery worker (Terminal 2)
-celery -A config worker -l info
-
-# 10. Start Celery Beat scheduler (Terminal 3)
-celery -A config beat -l info
-
-# 11. Access the app
-# Dashboard: http://localhost:8000/dashboard/
-# Admin: http://localhost:8000/admin/
 ```
 
 ---
@@ -100,9 +86,6 @@ python manage.py makemigrations
 # Apply migrations
 python manage.py migrate
 
-# Revert migrations
-python manage.py migrate app_name 0001
-
 # Show migration status
 python manage.py showmigrations
 ```
@@ -112,45 +95,20 @@ python manage.py showmigrations
 # Create superuser
 python manage.py createsuperuser
 
-# Create demo data
+# Seed demo data
 python manage.py create_demo_data
 
 # Change user password
-python manage.py changepassword username
+python manage.py changepassword email@example.com
 ```
 
-### Development
+### Development & Testing
 ```bash
 # Run tests
 python manage.py test
 
-# Run tests with coverage
-coverage run --source='.' manage.py test
-coverage report
-
 # Django shell
 python manage.py shell
-
-# Lint code
-pylint apps/
-
-# Format code
-black .
-```
-
-### Celery
-```bash
-# Start worker
-celery -A config worker -l info
-
-# Start scheduler
-celery -A config beat -l info
-
-# Purge queue
-celery -A config purge
-
-# Inspect active tasks
-celery -A config inspect active
 ```
 
 ### Static Files
@@ -158,7 +116,7 @@ celery -A config inspect active
 # Collect static files
 python manage.py collectstatic --noinput
 
-# Clear stale static files
+# Clear static files and collect again
 python manage.py collectstatic --clear --noinput
 ```
 
@@ -187,12 +145,12 @@ curl -X POST http://localhost:8000/api/auth/login/ \
     "password": "password123"
   }'
 
-# Get current user
+# Get current user profile
 curl -X GET http://localhost:8000/api/auth/users/profile/ \
-  -H "Authorization: Bearer YOUR_TOKEN"
+  -H "Authorization: Token YOUR_TOKEN"
 ```
 
-### Dashboard
+### Dashboard Analytics
 
 ```bash
 # Get stats
@@ -200,209 +158,31 @@ curl -X GET http://localhost:8000/api/dashboard/stats/
 
 # Get signup chart data
 curl -X GET "http://localhost:8000/api/dashboard/chart-signups/?months=6"
-
-# Get role distribution
-curl -X GET http://localhost:8000/api/dashboard/chart-role-distribution/
-
-# Get recent activity
-curl -X GET "http://localhost:8000/api/dashboard/recent-activity/?limit=10"
-```
-
-### Audit Logs
-
-```bash
-# Get audit logs
-curl -X GET http://localhost:8000/api/audit/logs/
-
-# Export to CSV
-curl -X GET http://localhost:8000/api/audit/logs/export_csv/ > logs.csv
-
-# Export to JSON
-curl -X GET http://localhost:8000/api/audit/logs/export_json/ > logs.json
-```
-
----
-
-## 🧪 Testing
-
-### Run All Tests
-```bash
-python manage.py test
-```
-
-### Run Specific App Tests
-```bash
-python manage.py test apps.accounts
-python manage.py test apps.dashboard
-python manage.py test apps.audit
-```
-
-### Run Specific Test Class
-```bash
-python manage.py test apps.accounts.tests.CustomUserTestCase
-```
-
-### Run with Coverage
-```bash
-coverage run --source='.' manage.py test
-coverage report
-coverage html  # Generate HTML report
-```
-
----
-
-## 📦 Project Structure
-
-```
-django-admin-pro/
-├── config/                 # Django configuration
-│   ├── settings.py        # Main settings
-│   ├── urls.py            # URL routing
-│   ├── wsgi.py            # WSGI server
-│   └── celery.py          # Celery config
-├── apps/                  # Django apps
-│   ├── accounts/          # User auth & profiles
-│   ├── dashboard/         # Dashboard views
-│   ├── audit/             # Audit logging
-│   └── core/              # Utilities & helpers
-├── templates/             # HTML templates
-│   ├── base.html         # Base template
-│   ├── sidebar.html      # Navigation sidebar
-│   ├── dashboard/        # Dashboard pages
-│   └── emails/           # Email templates
-├── static/               # CSS, JS, images
-├── manage.py            # Django CLI
-├── docker-compose.yml   # Docker services
-├── Dockerfile           # Container image
-├── requirements.txt     # Python dependencies
-└── README.md           # Main documentation
 ```
 
 ---
 
 ## 🛠️ Customization
 
-### Adding a New App
-
-```bash
-# Create app
-python manage.py startapp myapp
-
-# Add to INSTALLED_APPS in settings.py
-INSTALLED_APPS = [
-    ...
-    'apps.myapp',
-]
-
-# Create models, views, urls, etc.
-# Run migrations
-python manage.py makemigrations
-python manage.py migrate
-```
-
 ### Customizing User Model
+The project uses a custom `CustomUser` model located in `apps/accounts/models.py`.
 
-The project uses a custom `CustomUser` model with:
-- Email-based authentication (no username)
-- Role-based access control
-- Two-factor authentication support
-- API key management
-
-Edit `apps/accounts/models.py` to add more fields:
-
+To add new fields to the user model:
 ```python
 class CustomUser(AbstractUser):
-    # Add custom fields
+    # Add custom fields here
     company = models.CharField(max_length=255, blank=True)
-    industry = models.CharField(max_length=255, blank=True)
-    # ... more fields
 ```
 
-Then run migrations:
+Then create and apply migrations:
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-### Adding RBAC to Views
-
-```python
-from apps.core.decorators import role_required
-from apps.core.permissions import IsOwner
-
-# Function-based views
-@role_required('owner', 'manager')
-def admin_view(request):
-    return Response({'message': 'Admin only'})
-
-# Class-based views
-from rest_framework.permissions import IsAuthenticated
-from apps.core.permissions import IsManager
-
-class AdminViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsManager]
-    # ... view code
-```
-
 ---
 
-## 🐛 Troubleshooting
+## 💬 Support & Help
 
-### Port Already in Use
-```bash
-# Find process using port 8000
-lsof -i :8000
-
-# Kill process
-kill -9 <PID>
-```
-
-### Database Connection Error
-```bash
-# Check PostgreSQL is running
-sudo service postgresql status
-
-# Verify .env database settings
-cat .env | grep DB_
-```
-
-### Celery Not Working
-```bash
-# Check Redis connection
-redis-cli ping
-
-# Verify REDIS_URL in .env
-# Check Celery logs for errors
-celery -A config worker -l debug
-```
-
-### Static Files Not Loading
-```bash
-# Collect static files
-python manage.py collectstatic --noinput --clear
-
-# Check STATIC_URL and STATIC_ROOT in settings
-```
-
----
-
-## 📚 Useful Resources
-
-- Django Docs: https://docs.djangoproject.com/
-- Django REST Framework: https://www.django-rest-framework.org/
-- Celery: https://docs.celeryproject.org/
-- PostgreSQL: https://www.postgresql.org/docs/
-- Redis: https://redis.io/documentation
-
----
-
-## 💬 Need Help?
-
-- Check the main [README.md](README.md)
-- Read [DEPLOYMENT.md](DEPLOYMENT.md) for production setup
-- Open an issue on GitHub
-- Email: support@djangoadminpro.com
-
----
-
-**Happy coding! 🚀**
+- Read [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment instructions.
+- Email support: support@djangoadminpro.com

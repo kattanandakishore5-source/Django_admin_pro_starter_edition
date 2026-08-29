@@ -1,4 +1,4 @@
-﻿from datetime import timedelta
+from datetime import timedelta
 
 from django.core.management.base import BaseCommand
 from django.utils import timezone
@@ -20,6 +20,7 @@ class Command(BaseCommand):
                 'is_verified': True,
                 'is_active': True,
                 'is_staff': True,
+                'is_superuser': True,
             }
         )
         if _:
@@ -34,6 +35,8 @@ class Command(BaseCommand):
                 'last_name': 'User',
                 'is_verified': True,
                 'is_active': True,
+                'is_staff': False,
+                'is_superuser': False,
             }
         )
         if _:
@@ -48,6 +51,8 @@ class Command(BaseCommand):
                 'last_name': 'User',
                 'is_verified': True,
                 'is_active': True,
+                'is_staff': False,
+                'is_superuser': False,
             }
         )
         if _:
@@ -64,6 +69,8 @@ class Command(BaseCommand):
                     'last_name': 'Demo',
                     'is_verified': True,
                     'is_active': True,
+                    'is_staff': False,
+                    'is_superuser': False,
                     'created_at': timezone.now() - timedelta(days=30-i*5),
                 }
             )

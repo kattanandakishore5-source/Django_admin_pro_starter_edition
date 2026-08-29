@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block page_title %}Users Management{% endblock %}
 
@@ -18,6 +18,7 @@
                     <tr>
                         <th class="text-left py-4 px-6 font-semibold">Email</th>
                         <th class="text-left py-4 px-6 font-semibold">Name</th>
+                        <th class="text-left py-4 px-6 font-semibold">Role</th>
                         <th class="text-left py-4 px-6 font-semibold">Status</th>
                         <th class="text-left py-4 px-6 font-semibold">Joined</th>
                         <th class="text-center py-4 px-6 font-semibold">Actions</th>
@@ -34,6 +35,15 @@
                         </td>
                         <td class="py-4 px-6">{{ user.first_name }} {{ user.last_name }}</td>
                         <td class="py-4 px-6">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium
+                                {% if user.is_superuser %}bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400
+                                {% elif user.is_staff %}bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400
+                                {% else %}bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400
+                                {% endif %}">
+                                {% if user.is_superuser %}Superuser{% elif user.is_staff %}Staff{% else %}User{% endif %}
+                            </span>
+                        </td>
+                        <td class="py-4 px-6">
                             <span class="px-3 py-1 rounded-full text-xs font-medium {% if user.is_active %}bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400{% else %}bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400{% endif %}">
                                 {% if user.is_active %}Active{% else %}Inactive{% endif %}
                             </span>
@@ -47,7 +57,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5" class="py-6 text-center text-gray-500">No users found.</td>
+                        <td colspan="6" class="py-6 text-center text-gray-500">No users found.</td>
                     </tr>
                     {% endfor %}
                 </tbody>

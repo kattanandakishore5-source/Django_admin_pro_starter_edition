@@ -64,12 +64,6 @@ echo Next steps:
 echo 1. Start the development server:
 echo    python manage.py runserver
 echo.
-echo 2. In another terminal, start Celery:
-echo    celery -A config worker -l info
-echo.
-echo 3. In another terminal, start Celery Beat:
-echo    celery -A config beat -l info
-echo.
 echo Demo credentials:
 echo Email: owner@example.com
 echo Password: password123
